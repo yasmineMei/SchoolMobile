@@ -1,18 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { HomeworkProvider } from '@/context/HomeworkContext';
+import { useTheme } from '@/theme';
 
-SplashScreen.preventAutoHideAsync();
+export default function RootLayout() {
+    const t = useTheme();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
-  );
+    return (
+        <HomeworkProvider>
+            <Stack
+                screenOptions={{
+                    headerStyle: { backgroundColor: t.card },
+                    headerTintColor: t.text,
+                    contentStyle: { backgroundColor: t.bg },
+                }}
+            >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="announcements/index" options={{ title: 'Annonces' }} />
+                <Stack.Screen name="announcements/[id]" options={{ title: 'Annonce' }} />
+                <Stack.Screen name="homework/[id]" options={{ title: 'Devoir' }} />
+                <Stack.Screen name="grades/[subject]" options={{ title: 'Matière' }} />            
+            </Stack>
+        </HomeworkProvider>
+    );
 }
